@@ -88,6 +88,10 @@ h1 {
     background-color:#4B946A;
     display:none;
 }
+.event.contacts {
+    background-color:#4B946A;
+    display:none;
+}
 
 @keyframes fade {
     from { opacity: 1.0; }
