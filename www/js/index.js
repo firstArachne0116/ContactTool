@@ -23,8 +23,9 @@ var app = {
         //     node.appendChild(textnode);                              // Append the text to <li>
         //     document.getElementById("contacts").appendChild(node); 
         // }
-        var node = document.createTextNode(JSON.stringify(contacts));
-        document.getElementById("main").appendChild(node);
+        // var node = document.createTextNode(JSON.stringify(contacts));
+        // document.getElementById("main").appendChild(node);
+        alert('Found ' + contacts.length + ' contacts.');
     },
     onErrorContact: function() {
 
