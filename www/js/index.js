@@ -16,46 +16,122 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var allContacts = [];
+
+document.getElementById('searchButton').addEventListener('click', onSearch);
+document.getElementById('markButton').addEventListener('click', onMark);
+
+function onSearch() {
+    const filter = document.getElementById('filter').value;
+    for (let i = 0; i < allContacts.length; i ++) {
+        for (let j = 0; j < allContacts[i].phoneNumbers.length; j++) {
+            var contact = document.getElementById("tr" + allContacts[i].phoneNumbers[j].id);
+            if (allContacts[i].displayName.includes(filter) || allContacts[i].phoneNumbers[j].value.includes(filter)) {
+                contact.style.display = 'table-row';
+            } else {
+                contact.style.display = 'none';
+            }
+        }
+    }
+}
+
+function getOptions() { 
+    var ele = document.getElementsByName('options'); 
+      
+    for(i = 0; i < ele.length; i++) { 
+        if(ele[i].checked) {
+            return ele[i].value;
+        }
+    }
+} 
+
+function onMark() {
+    const option = getOptions();
+    for (let i = 0; i < allContacts.length; i ++) {
+        let bUpdate = false;
+        for (let j = 0; j < allContacts[i].phoneNumbers.length; j++) {
+            var contact = document.getElementById("tr" + allContacts[i].phoneNumbers[j].id);
+            if (contact.style.display !== 'none') {
+                var num = document.getElementById("num" + allContacts[i].phoneNumbers[j].id);
+                bUpdate = true;
+                if (parseInt(option)) {
+                    allContacts[i].phoneNumbers[j].value = allContacts[i].phoneNumbers[j].value + '*';
+                }
+                else {
+                    allContacts[i].phoneNumbers[j].value = '*' + allContacts[i].phoneNumbers[j].value;
+                }
+                num.innerHTML = allContacts[i].phoneNumbers[j].value;
+            }
+        }
+        if (bUpdate) {
+            allContacts[i].save(function(saveSuccess) {
+                // alert("Contact successful update");
+            }, function(saveError){
+                // alert("Error when updating");
+            });
+        }
+    }
+}
+
 var app = {
     // Application Constructor
     initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        document.addEventListener("deviceready", this.onDeviceReady.bind(this), false);
     },
+
 
     // deviceready Event Handler
     //
     // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
+    // "pause", "resume", etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
-        
         var options      = new ContactFindOptions();
         options.filter   = "";
         options.multiple = true;
         var fields = ["displayName","phoneNumbers"];
-        navigator.contacts.find(fields, onSuccessContact, onErrorContact, options);
+        navigator.contacts.find(fields, this.onSuccessContact, this.onErrorContact, options);
     },
 
     onSuccessContact: function(contacts) {
-        var contactsElement = parentElement.querySelector('.contacts');
-        contactsElement.setAttribute('style', 'display:block;');
+        contacts.sort(function(a, b) {
+            if (a.displayName === b.displayName) return 0;
+            if (a.displayName > b.displayName) return 1;
+            return -1;
+        })
+        allContacts = contacts;
+        var contactsNode = document.getElementById("contacts");
+        for (let i = 0; i < contacts.length; i ++) {
+            for (let j = 0; j < contacts[i].phoneNumbers.length; j++) {
+                var contact = document.createElement("tr");
+                contact.setAttribute('id', 'tr'+contacts[i].phoneNumbers[j].id);
+
+                // var ID = document.createElement("td");
+                // ID.appendChild(document.createTextNode(contacts[i].phoneNumbers[j].id));
+
+                var name = document.createElement("td");
+                name.appendChild(document.createTextNode(contacts[i].displayName));
+
+                var phoneNumber = document.createElement("td");
+                phoneNumber.setAttribute('id', 'num'+contacts[i].phoneNumbers[j].id);
+                phoneNumber.appendChild(document.createTextNode(contacts[i].phoneNumbers[j].value));
+
+                var phoneType = document.createElement("td");
+                phoneType.appendChild(document.createTextNode(contacts[i].phoneNumbers[j].type));
+
+                // contact.appendChild(ID);
+                contact.appendChild(name);
+                contact.appendChild(phoneNumber);
+                contact.appendChild(phoneType);
+
+                contactsNode.appendChild(contact);
+            }
+        }
     },
 
     onErrorContact: function(err) {
-
+        alert("error occured while contacts receiving");
     },
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
-    }
 };
 
 app.initialize();
