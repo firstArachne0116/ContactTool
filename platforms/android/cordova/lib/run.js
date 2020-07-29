@@ -23,7 +23,6 @@ var path = require('path');
 var emulator = require('./emulator');
 var device = require('./device');
 var Q = require('q');
-var PackageType = require('./PackageType');
 var events = require('cordova-common').events;
 
 function getInstallTarget (runOptions) {
@@ -105,14 +104,6 @@ module.exports.run = function (runOptions) {
         return new Promise((resolve) => {
             const builder = require('./builders/builders').getBuilder();
             const buildOptions = require('./build').parseBuildOptions(runOptions, null, self.root);
-
-            // Android app bundles cannot be deployed directly to the device
-            if (buildOptions.packageType === PackageType.BUNDLE) {
-                const packageTypeErrorMessage = 'Package type "bundle" is not supported during cordova run.';
-                events.emit('error', packageTypeErrorMessage);
-                throw packageTypeErrorMessage;
-            }
-
             resolve(builder.fetchBuildResults(buildOptions.buildType, buildOptions.arch));
         }).then(function (buildResults) {
             if (resolvedTarget && resolvedTarget.isEmulator) {

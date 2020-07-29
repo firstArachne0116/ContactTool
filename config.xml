@@ -1,14 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.example.hello" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>HelloWorld</name>
+    <name>Contact Marker</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A Simple Contact Maker App.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="firstarachne0116@gmail.com" href="http://cordova.io">
+        First Arachne
     </author>
     <content src="index.html" />
+    <preference name="android-minSdkVersion" value="18" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-contacts" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

@@ -28,20 +28,54 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
         <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
         <title>Hello World</title>
     </head>
     <body>
         <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+            <h1>Your Contacts</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-2" style="align-items: center; align-self: center; align-content: center;">
+                        <label for="filter" style="margin-left: 20px;">Filter:</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control" id="filter" name="filter" />
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-primary" id="searchButton">Search</button>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 20px; margin-top: 20px;">
+                    <div class="col" style="align-items: center; align-self: center; align-content: center;">
+                        <input type="radio" class="form-check-input" id="options" name="options" value="0" checked/>Front
+                    </div>
+                    <div class="col" style="align-items: center; align-self: center; align-content: center;">
+                        <input type="radio" class="form-check-input" id="options" name="options" value="1" />End
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary" id="markButton">Mark</button>
+                    </div>
+                </div>
             </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <!-- <th>ID</th> -->
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Phone type</th>
+                    </tr>
+                </thead>
+                <tbody id="contacts" name="contacts">
+                    
+                </tbody>
+            </table>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
