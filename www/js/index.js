@@ -85,6 +85,7 @@ var app = {
     // Bind any cordova events here. Common events are:
     // "pause", "resume", etc.
     onDeviceReady: function() {
+        alert('ready');
         var options      = new ContactFindOptions();
         options.filter   = "";
         options.multiple = true;
@@ -93,6 +94,7 @@ var app = {
     },
 
     onSuccessContact: function(contacts) {
+        alert(JSON.stringify(contacts));
         contacts.sort(function(a, b) {
             if (a.displayName === b.displayName) return 0;
             if (a.displayName > b.displayName) return 1;
